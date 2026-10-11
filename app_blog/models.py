@@ -16,6 +16,14 @@ class Category(models.Model):
     def __str__(self):
         return self.category
 
+    def get_absolute_url(self):
+        try:
+            url = reverse('articles-category-list', kwargs={'slug': self.slug})
+        except Exception:
+            url = "/"
+        return url
+
+
 class Article(models.Model):
     title = models.CharField(u'Заголовок', max_length=250, help_text=u'Максимум 250 сим.')
     description = models.TextField(blank=True, verbose_name=u'Опис')
@@ -49,9 +57,10 @@ class Article(models.Model):
                 'day': self.pub_date.strftime("%d"),
                 'slug': self.slug,
             })
-        except:
+        except Exception:
             url = "/"
         return url
+
 
 class ArticleImage(models.Model):
     article = models.ForeignKey(
